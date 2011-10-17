@@ -2,6 +2,9 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.RMISecurityManager;
 import java.rmi.server.UnicastRemoteObject;
+
+import java.rmi.AlreadyBoundException;
+import java.rmi.*;
 import java.rmi.registry.*; 
  
 public class Server extends UnicastRemoteObject implements ServerIntf {
@@ -15,23 +18,21 @@ public class Server extends UnicastRemoteObject implements ServerIntf {
     }
 
     public String odwrocString(String str) {
-		String odwr = new StringBuffer(str).reverse().toString();
-		return odwr;
+	String odwr = new StringBuffer(str).reverse().toString();
+	return odwr;
     }    
     
-    public static void main(String args[]) throws RemoteException {
-	System.setProperty("java.security.policy", "server.policy");
-	
-        if (System.getSecurityManager() == null) 
-	    System.setSecurityManager(new RMISecurityManager());
-	
-	LocateRegistry.createRegistry(1099);
-	
+   
+ public static void main(String args[]) throws RemoteException {
+
         try {
 	    Server obj = new Server();
-	    Naming.rebind("//localhost/some_name", obj);
+	    Naming.rebind("//localhost:1099/some", obj);
+	    
 	} catch (Exception e) {
 	    System.out.println(e.getMessage());
 	}
-    }
-}
+
+
+    } // public static void main
+} // public class Server
