@@ -1,8 +1,9 @@
+import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.RMISecurityManager;
 import java.rmi.server.UnicastRemoteObject;
-import java.rmi.registry.*; 
+import java.rmi.*; 
  
 public class Server extends UnicastRemoteObject implements ServerIntf {
 
@@ -20,18 +21,15 @@ public class Server extends UnicastRemoteObject implements ServerIntf {
     }    
     
     public static void main(String args[]) throws RemoteException {
-	System.setProperty("java.security.policy", "server.policy");
 	
-        if (System.getSecurityManager() == null) 
-	    System.setSecurityManager(new RMISecurityManager());
-	
-	LocateRegistry.createRegistry(1099);
+//	LocateRegistry.createRegistry(1099);
 	
         try {
-	    Server obj = new Server();
-	    Naming.rebind("//localhost/some_name", obj);
-	} catch (Exception e) {
-	    System.out.println(e.getMessage());
-	}
+	   // Server obj = new Server();
+	    Naming.bind("//localhost/some_name");
+        }
+        catch(AlreadyBoundException ex) {
+            System.out.print(ex.getMessage());
+        }
     }
 }
